@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: shortify-app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+    environment:
+      - APP_PORT=:3000
+      - REDIS_ADDR=redis:6379
+      - DOMAIN=shortify.site
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    container_name: shortify-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  redis_data:
